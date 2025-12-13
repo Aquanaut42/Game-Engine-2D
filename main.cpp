@@ -1,8 +1,7 @@
 #include <iostream>
 #include "window.h"
-#include "logic.h"
+#include "world.h"
 
-bool paused = false;
 int simulationSpeed = 20; // Start with 200 ms per update
 
 int main(int argc, char* argv[]) {
@@ -17,12 +16,12 @@ int main(int argc, char* argv[]) {
     bool running = true;
     SDL_Event event;
 
-    worldUpdate();
+    worldCreate();
 
     // Main loop
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {   
+            if (event.type == SDL_QUIT) {
                 running = false;    // Close the program when the window closes
             }
 
@@ -31,9 +30,9 @@ int main(int argc, char* argv[]) {
         }
 
         // Draw simulation
-        windowLogic();
+        windowDraw();
 
-        SDL_Delay(simulationSpeed);  // Use toolbar-controlled speed
+        //SDL_Delay(simulationSpeed);  // Use toolbar-controlled speed
     }
 
     // Destroy the window

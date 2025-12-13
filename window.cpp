@@ -1,6 +1,6 @@
 // window.cpp
 #include "window.h"
-#include "logic.h"
+#include "world.h"
 #include <iostream>
 
 SDL_Window* window = nullptr;
@@ -9,9 +9,13 @@ SDL_Renderer* renderer = nullptr;
 int screenCoordsX = 0;
 int screenCoordsY = 0;
 
+int winW = WINDOW_WIDTH;
+int winH = WINDOW_HEIGHT;
+
 //===============================================
-//  This functions initialises the window
-//===============================================
+/**
+ *  This functions initialises the window
+ */
 bool initWindow(const char* title) {
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -25,8 +29,11 @@ bool initWindow(const char* title) {
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        SDL_WINDOW_RESIZABLE//SDL_WINDOW_SHOWN
+        SDL_WINDOW_RESIZABLE
     );
+
+    // Set the maximum window size to the size of the world ( full screen can still be too big )
+    SDL_SetWindowMaximumSize(window, COLS*pixelSize, ROWS*pixelSize);
 
     if (!window) {
         std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << "\n";
@@ -35,6 +42,10 @@ bool initWindow(const char* title) {
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    // Give the option to blend several colour
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     if (!renderer) {
         std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << "\n";
         SDL_DestroyWindow(window);
@@ -47,8 +58,9 @@ bool initWindow(const char* title) {
 //===============================================
 
 //===============================================
-//  This functions cleans the window by destroying it
-//===============================================
+/**
+ *  This functions cleans the window by destroying it
+ */
 void cleanupWindow() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -57,79 +69,88 @@ void cleanupWindow() {
 //===============================================
 
 //===============================================
-//  This functions draws a square in the coords
-//===============================================
-void drawSquare(int x, int y, int state) {
-    
-    if (x  >= WINDOW_WIDTH || y  >= WINDOW_HEIGHT
-        || x < 0 || y < 0 ) {
-        return; // Out of bounds
-    }
-    SDL_Rect rect = { x * pixelSize + screenCoordsX , y * pixelSize + screenCoordsY , pixelSize, pixelSize };
-    if (state > 0 && state <= 100) {
-        // Growing tree stages - shades of green
-        int greenValue = 255 - (state * 100 / 100); // from 155 to 255
-        SDL_SetRenderDrawColor(renderer, 34, greenValue, 34, 255);
-    } else if (state > 100 && state <= 110) {
-        // Burning tree stages - shades of red
-        int redValue = 255 - ((state - 101) * 20); // from 255 to 55
-        SDL_SetRenderDrawColor(renderer, redValue, 0, 0, 255);
-    } else {
-        // Dirt - brown
-        SDL_SetRenderDrawColor(renderer, 139, 69, 19, 255);
-    }
-    
+/**
+ * Draw a pixel at the given grid coordinates.
+ *
+ * @param x Grid X coordinate
+ * @param y Grid Y coordinate
+ * @param r Red   (0–255)
+ * @param g Green (0–255)
+ * @param b Blue  (0–255)
+ * @param state Alpha/opacity (0–255)
+ *
+ * Draws a single pixel-sized rectangle at (x, y) using the renderer.
+ */
+void drawPixel(int x, int y, int r, int g, int b, int state) {
+
+    // the pixel, it's size, shape, colour and transparancy
+    SDL_Rect rect = { x, y, pixelSize, pixelSize };
+    SDL_SetRenderDrawColor(renderer, r, g, b, state);
+
+    // Draw the pixel
     SDL_RenderFillRect(renderer, &rect);
 }
 //===============================================
 
 //===============================================
-//  This function runs the main logic of the window
-//
-//  In other words it draws the entire world
-//===============================================
-void windowLogic( ) {
+/**
+ * This function redraws the window
+ *
+ * In other words it draws the entire world
+ */
+void windowDraw( ) {
 
+    // Clear the window
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    // Draw the whole world
     for ( int i = 0 ; i < COLS ; i++ ) {
         for ( int j = 0 ; j < ROWS ; j++ ) {
-            drawSquare( i, j, world[i][j] );
+            drawPixel( i * pixelSize + screenCoordsX, j * pixelSize + screenCoordsY, 0, 0, 200, world[LAYER_GROUND][i][j] );
         }
     }
-    
+
     SDL_RenderPresent(renderer);
 
 }
 //===============================================
 
 //===============================================
-//  This function handles arrows input
-//===============================================
+/**
+ *   This function handles user input and updates the screen size
+ */
 void handleInput(SDL_Event& e) {
     if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
             case SDLK_LEFT:
-                screenCoordsX += 10;
+                screenCoordsX += pixelSize/5;
                 break;
             case SDLK_RIGHT:
-                screenCoordsX -= 10;
+                screenCoordsX -= pixelSize/5;
                 break;
             case SDLK_UP:
-                screenCoordsY += 10;
+                screenCoordsY += pixelSize;
                 break;
             case SDLK_DOWN:
-                screenCoordsY -= 10;
+                screenCoordsY -= pixelSize;
                 break;
         }
+    }
+
+    // Updates the window size variable when the window size changes
+    if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+        winW = e.window.data1;
+        winH = e.window.data2;
     }
 
     // Clamp camera position inside the world
     if (screenCoordsX > 0) screenCoordsX = 0;
     if (screenCoordsY > 0) screenCoordsY = 0;
 
-    if (screenCoordsX < WINDOW_WIDTH  - world_WIDTH)
-        screenCoordsX = WINDOW_WIDTH  - world_WIDTH;
-    if (screenCoordsY < WINDOW_HEIGHT - world_HEIGHT)
-        screenCoordsY = WINDOW_HEIGHT - world_HEIGHT;
+    if (screenCoordsX < winW  - world_WIDTH)
+        screenCoordsX = winW  - world_WIDTH;
+    if (screenCoordsY < winH - world_HEIGHT)
+        screenCoordsY = winH - world_HEIGHT;
 }
-
 //===============================================
