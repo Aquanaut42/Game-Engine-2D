@@ -10,6 +10,8 @@ add_executable(Game_Engine_2D main.cpp
         world.cpp
         world.h
         window.cpp
-        window.h)
+        window.h
+        asset_manager/asset_manager.cpp
+        asset_manager/asset_manager.h)
 
 target_link_libraries(Game_Engine_2D ${SDL2_LIBRARIES})

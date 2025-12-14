@@ -1,6 +1,7 @@
 // window.cpp
 #include "window.h"
 #include "world.h"
+#include "asset_manager/asset_manager.h"
 #include <iostream>
 
 SDL_Window* window = nullptr;
@@ -52,6 +53,8 @@ bool initWindow(const char* title) {
         SDL_Quit();
         return false;
     }
+
+    AssetManager::init(renderer);
 
     return true;
 }
