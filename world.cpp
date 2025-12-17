@@ -1,6 +1,6 @@
 // world.cpp
 #include "world.h"
-#include "assets/asset_manager.h"
+#include "asset_manager/asset_manager.h"
 #include <iostream>
 using namespace std;
 

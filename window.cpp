@@ -54,8 +54,6 @@ bool initWindow(const char* title) {
         return false;
     }
 
-    AssetManager::init(renderer);
-
     return true;
 }
 //===============================================
@@ -124,21 +122,20 @@ void windowDraw( ) {
  *   This function handles user input and updates the screen size
  */
 void handleInput(SDL_Event& e) {
-    if (e.type == SDL_KEYDOWN) {
-        switch (e.key.keysym.sym) {
-            case SDLK_LEFT:
-                screenCoordsX += pixelSize/5;
-                break;
-            case SDLK_RIGHT:
-                screenCoordsX -= pixelSize/5;
-                break;
-            case SDLK_UP:
-                screenCoordsY += pixelSize;
-                break;
-            case SDLK_DOWN:
-                screenCoordsY -= pixelSize;
-                break;
-        }
+
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+
+    if (state[SDL_SCANCODE_LEFT]) {
+        screenCoordsX += pixelSize / 2;
+    }
+    if (state[SDL_SCANCODE_RIGHT]) {
+        screenCoordsX -= pixelSize / 2;
+    }
+    if (state[SDL_SCANCODE_UP]) {
+        screenCoordsY += pixelSize / 2;
+    }
+    if (state[SDL_SCANCODE_DOWN]) {
+        screenCoordsY -= pixelSize / 2;
     }
 
     // Updates the window size variable when the window size changes
