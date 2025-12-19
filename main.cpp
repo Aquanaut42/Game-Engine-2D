@@ -1,6 +1,7 @@
 #include <iostream>
 #include "window.h"
 #include "world.h"
+#include "UserInterface.h"
 
 int simulationSpeed = 20; // Start with 200 ms per update
 

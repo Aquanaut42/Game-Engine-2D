@@ -3,6 +3,7 @@
 #include "world.h"
 #include "asset_manager/asset_manager.h"
 #include <iostream>
+#include "UserInterface.h"
 
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
@@ -111,6 +112,14 @@ void windowDraw( ) {
             drawPixel( i * pixelSize + screenCoordsX, j * pixelSize + screenCoordsY, 0, 0, 200, world[LAYER_GROUND][i][j] );
         }
     }
+
+    button( 10, 0, "t");
+    button( 10, 20, "te");
+    button( 10, 40, "tes");
+    button( 10, 60, "test");
+    button( 10, 80, "testi");
+    button( 10, 100, "testin");
+    button( 10, 120, "testing");
 
     SDL_RenderPresent(renderer);
 
