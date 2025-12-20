@@ -119,7 +119,7 @@ void DrawStringFont8(int x, int y, const char *s, int state)
  */
 bool button( int x, int y, std::string text) {
     const int FACE_HEIGHT = 13;
-    const int THICKNESS   = 2;   // <<< controls how “thick” the button looks
+    const int THICKNESS   = 2;   // controls how “thick” the button looks
 
     int width = text.length() * 6 + 3;
 

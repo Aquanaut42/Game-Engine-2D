@@ -16,4 +16,8 @@ void drawPixel(int x, int y, int r, int g, int b, int state);
 void windowDraw();
 void handleInput(SDL_Event& e);
 
+// The size of the window
+extern int winW;
+extern int winH;
+
 #endif

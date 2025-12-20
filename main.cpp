@@ -2,6 +2,7 @@
 #include "window.h"
 #include "world.h"
 #include "UserInterface.h"
+#include "UI.h"
 
 int simulationSpeed = 20; // Start with 200 ms per update
 
@@ -17,6 +18,9 @@ int main(int argc, char* argv[]) {
     bool running = true;
     SDL_Event event;
 
+    // Initialize the UI, based on the screen size, so after SDL initialized
+    initUI();
+
     worldCreate();
 
     // Main loop
@@ -28,6 +32,12 @@ int main(int argc, char* argv[]) {
 
             // Handle input
             handleInput(event);
+        }
+
+        if ( settings_Enable == 1 ) {
+            UICreate( OPTION_Pause );
+        } else {
+            UIRemove();
         }
 
         // Draw simulation

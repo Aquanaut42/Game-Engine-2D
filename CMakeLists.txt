@@ -18,6 +18,8 @@ add_executable(
         UserInterface.h
         fonts/font8.c
         fonts/font12.c
+        UI.h
+        UI.cpp
 )
 
 target_link_libraries(Game_Engine_2D ${SDL2_LIBRARIES})
