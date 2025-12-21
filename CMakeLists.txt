@@ -23,6 +23,7 @@ add_executable(
         UserInterface/PauseUI.h
         handleInput.cpp
         handleInput.h
+        engine_state.h
 )
 
 target_link_libraries(Game_Engine_2D ${SDL2_LIBRARIES})

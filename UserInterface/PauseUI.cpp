@@ -7,6 +7,7 @@
 #include "../window.h"
 #include "../world.h"
 #include "UserInterface.h"
+#include "../handleInput.h"
 
 #include <vector>
 
@@ -25,7 +26,13 @@ void PauseUIButtons () {
     const int quitStartX = (PAUSE_WIDTH / 2) - (quitWidth / 2) + startX;
     const int quitStartY = startY + PAUSE_HEIGHT - ( (PAUSE_HEIGHT - 5 * pixelSize) / 5 );
 
-    button( quitStartX, quitStartY, "Quit");
+    if ( quitStartX <= mouseX && quitStartX + quitWidth >= mouseX &&
+         quitStartY <= mouseY && quitStartY + BUTTON_FACE_HEIGHT >= mouseY )
+    {
+        button( quitStartX, quitStartY + 1,1, "Quit");
+    } else {
+        button( quitStartX, quitStartY,2, "Quit");
+    }
 
     for (int i = startX; i < startX + PAUSE_WIDTH; i++) {
         for (int j = startY; j < startY + PAUSE_HEIGHT; j++) {

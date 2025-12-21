@@ -130,9 +130,7 @@ void DrawStringFont8(int x, int y, const char *s, int state)
  * @param y
  * @return button width
  */
-int button( int x, int y, std::string text) {
-
-    const int THICKNESS   = 2;   // controls how “thick” the button looks
+int button( int x, int y,int THICKNESS, std::string text) {
 
     int width = text.length() * 6 + 3;
 

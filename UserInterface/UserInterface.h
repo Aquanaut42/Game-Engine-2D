@@ -15,7 +15,7 @@ void DrawCharFont12(int x, int y, char c, int state);
 void DrawStringFont8(int x, int y, const char *s, int state);
 void DrawStringFont12(int x, int y, const char *s, int state);
 
-int button( int x, int y, std::string text);
+int button( int x, int y, int THICKNESS , std::string text);
 
 extern int UI_COLS;
 extern int UI_ROWS;

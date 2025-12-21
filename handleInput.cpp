@@ -5,11 +5,52 @@
 #include <SDL_events.h>
 #include "UserInterface/UserInterface.h"
 #include "window.h"
+#include "engine_state.h"
+
+#include <SDL2/SDL.h>
+
+#include "UserInterface/Interface.h"
+
+//===============================================
+int mouseX, mouseY; // Mouse coords
+int mX, mY;
+/**
+ * This function tracks the muouse position on the window, updates the mousX and mouseY coords
+ */
+void mouseTrack ()
+{
+    SDL_GetMouseState(&mX, &mY);
+    mouseX = mX /pixelSize;
+    mouseY = mY /pixelSize;
+}
+//===============================================
+
+//===============================================
+/**
+ * This function proccesses the mouse click into action
+ *
+ * @param x Coords
+ * @param y Coords
+ */
+void mouseClick ()
+{
+
+    if ( userInterface[OPTION_Buttons][mouseX][mouseY] != 0 ) {
+        switch (userInterface[OPTION_Buttons][mouseX][mouseY]) {
+            case BUTTON_Quit:
+                SDL_DestroyWindow(window);
+                SDL_Quit();
+                runningState = false;
+                break;
+        }
+    }
+}
+//===============================================
 
 //===============================================
 bool mousePressed = false;
-int mouseX = 0;
-int mouseY = 0;
+int mousePressedX = 0;
+int mousePressedY = 0;
 /**
  *   This function handles user input and updates the screen size
  */
@@ -20,10 +61,11 @@ void handleInput(SDL_Event& e) {
         e.button.button == SDL_BUTTON_LEFT)
     {
         mousePressed = true;
-        mouseX = e.button.x;
-        mouseY = e.button.y;
-    }
+        mousePressedX = e.button.x;
+        mousePressedY = e.button.y;
 
+        mouseClick ();
+    }
     // Detect mouse unpress
     if (e.type == SDL_MOUSEBUTTONUP &&
         e.button.button == SDL_BUTTON_LEFT)

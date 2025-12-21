@@ -16,7 +16,7 @@ enum UI_OPTION {
 };
 
 enum BUTTONCODE {
-    BUTTON_Quit = 0,
+    BUTTON_Quit = 1,
     BUTTON_COUNT
 };
 
