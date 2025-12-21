@@ -1,9 +1,10 @@
-// User_Interface.h
+// UserInterface.h
 // Created by manfed on 2025-12-17.
 //
 
 #ifndef GAME_ENGINE_2D_USER_INTERFACE_H
 #define GAME_ENGINE_2D_USER_INTERFACE_H
+
 #include <cstdint>
 #include <string>
 
@@ -14,6 +15,20 @@ void DrawCharFont12(int x, int y, char c, int state);
 void DrawStringFont8(int x, int y, const char *s, int state);
 void DrawStringFont12(int x, int y, const char *s, int state);
 
-bool button( int x, int y, std::string text);
+int button( int x, int y, std::string text);
+
+extern int UI_COLS;
+extern int UI_ROWS;
+
+extern int settings_Enable;
+
+void initUI();
+void UICreate(int UIOption);
+void UIRemove();
+
+extern const int PAUSE_WIDTH;
+extern const int PAUSE_HEIGHT;
+
+extern const int BUTTON_FACE_HEIGHT;
 
 #endif //GAME_ENGINE_2D_USER_INTERFACE_H

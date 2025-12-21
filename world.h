@@ -44,6 +44,7 @@
 
     void worldUpdate ( );
     void worldCreate ( );
+    void WorldDraw ();
 
     extern int screenW;
     extern int screenH;

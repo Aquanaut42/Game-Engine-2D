@@ -1,10 +1,9 @@
 // window.cpp
 #include "window.h"
 #include "world.h"
-#include "asset_manager/asset_manager.h"
 #include <iostream>
-#include "UserInterface.h"
-#include "UI.h"
+#include "UserInterface/UserInterface.h"
+#include "UserInterface/Interface.h"
 
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
@@ -119,94 +118,13 @@ void windowDraw( ) {
     SDL_RenderClear(renderer);
 
     // Draw the whole world
-    for ( int i = 0 ; i < COLS ; i++ ) {
-        for ( int j = 0 ; j < ROWS ; j++ ) {
-            drawPixel( i * pixelSize + screenCoordsX, j * pixelSize + screenCoordsY, 0, 0, 200, world[LAYER_GROUND][i][j] );
-        }
-    }
+    WorldDraw ();
 
-    UICreate ( OPTION_Pause );
+    if ( settings_Enable == 1 ) {
+        UICreate ( OPTION_Pause );
+    }
 
     SDL_RenderPresent(renderer);
 
-}
-//===============================================
-
-//===============================================
-bool mousePressed = false;
-int mouseX = 0;
-int mouseY = 0;
-/**
- *   This function handles user input and updates the screen size
- */
-void handleInput(SDL_Event& e) {
-
-    // Detect mouse press
-    if (e.type == SDL_MOUSEBUTTONDOWN &&
-        e.button.button == SDL_BUTTON_LEFT)
-    {
-        mousePressed = true;
-        mouseX = e.button.x;
-        mouseY = e.button.y;
-    }
-
-    // Detect mouse unpress
-    if (e.type == SDL_MOUSEBUTTONUP &&
-        e.button.button == SDL_BUTTON_LEFT)
-    {
-        mousePressed = false;
-    }
-
-    // Detect keyboard press
-    const Uint8* state = SDL_GetKeyboardState(NULL);
-
-    // Move character
-    if (state[SDL_SCANCODE_LEFT]) {
-        screenCoordsX += pixelSize * 2;// pixelSize / 2;
-    }
-    if (state[SDL_SCANCODE_RIGHT]) {
-        screenCoordsX -= pixelSize* 2 ;// pixelSize / 2;
-    }
-    if (state[SDL_SCANCODE_UP]) {
-        screenCoordsY += pixelSize / 2;
-    }
-    if (state[SDL_SCANCODE_DOWN]) {
-        screenCoordsY -= pixelSize / 2;
-    }
-
-    //Get settings window
-    if (state[SDL_SCANCODE_ESCAPE]) {
-        if (settings_Enable == 0) settings_Enable = 1;
-        else settings_Enable = 0;
-    }
-
-    // Updates the window size variable when the window size changes
-    if (e.type == SDL_WINDOWEVENT) {
-        if (e.window.event == SDL_WINDOWEVENT_RESIZED) {
-            isResizing = true;
-            winW = e.window.data1;
-            winH = e.window.data2;
-        }
-
-        if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-            winW = e.window.data1;
-            winH = e.window.data2;
-        }
-
-        if (e.window.event == SDL_WINDOWEVENT_EXPOSED) {
-            isResizing = false;
-        }
-    }
-
-    // Clamp camera position inside the world
-    if (!isResizing) {
-        if (screenCoordsX > 0) screenCoordsX = 0;
-        if (screenCoordsY > 0) screenCoordsY = 0;
-
-        if (screenCoordsX < winW - world_WIDTH)
-            screenCoordsX = winW - world_WIDTH;
-        if (screenCoordsY < winH - world_HEIGHT)
-            screenCoordsY = winH - world_HEIGHT;
-    }
 }
 //===============================================

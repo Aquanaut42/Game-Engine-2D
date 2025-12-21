@@ -20,4 +20,10 @@ void handleInput(SDL_Event& e);
 extern int winW;
 extern int winH;
 
+// The coords of the screen compared to the world
+extern int screenCoordsX;
+extern int screenCoordsY;
+// Is the user resizing the screen
+extern bool isResizing;
+
 #endif

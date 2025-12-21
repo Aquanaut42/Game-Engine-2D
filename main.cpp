@@ -1,8 +1,8 @@
 #include <iostream>
 #include "window.h"
 #include "world.h"
-#include "UserInterface.h"
-#include "UI.h"
+#include "UserInterface/UserInterface.h"
+#include "UserInterface/Interface.h"
 
 int simulationSpeed = 20; // Start with 200 ms per update
 
@@ -35,9 +35,10 @@ int main(int argc, char* argv[]) {
         }
 
         if ( settings_Enable == 1 ) {
+            // Pause menu
             UICreate( OPTION_Pause );
         } else {
-            UIRemove();
+            // main game
         }
 
         // Draw simulation

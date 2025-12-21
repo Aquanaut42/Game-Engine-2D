@@ -23,6 +23,16 @@ void worldCreate ( ) {
 //===============================================
 
 //===============================================
+void WorldDraw () {
+    for ( int i = 0 ; i < COLS ; i++ ) {
+        for ( int j = 0 ; j < ROWS ; j++ ) {
+            drawPixel( i * pixelSize + screenCoordsX, j * pixelSize + screenCoordsY, 0, 0, 200, world[LAYER_GROUND][i][j] );
+        }
+    }
+}
+//===============================================
+
+//===============================================
 /**
  * This function figures out the logic to update the world
 */

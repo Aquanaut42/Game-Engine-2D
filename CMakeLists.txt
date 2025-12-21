@@ -14,12 +14,15 @@ add_executable(
         window.h
         asset_manager/asset_manager.cpp
         asset_manager/asset_manager.h
-        UserInterface.cpp
-        UserInterface.h
+        UserInterface/UserInterface.cpp
+        UserInterface/UserInterface.h
         fonts/font8.c
         fonts/font12.c
-        UI.h
-        UI.cpp
+        UserInterface/PauseUI.cpp
+        UserInterface/Interface.h
+        UserInterface/PauseUI.h
+        handleInput.cpp
+        handleInput.h
 )
 
 target_link_libraries(Game_Engine_2D ${SDL2_LIBRARIES})
